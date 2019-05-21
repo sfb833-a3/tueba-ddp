@@ -35,4 +35,4 @@ currently consists of the following subcorpora:
 ## Questions
 
 Please send any questions to `daniel.de-kok@uni-tuebingen.de` or
-create an issue.
+[create an issue on GitHub](https://github.com/sfb833-a3/tueba-ddp/issues).
