@@ -16,6 +16,17 @@ currently consists of the following subcorpora:
 | [Wikipedia](https://de.wikipedia.org/) (2019) | Encyclopedia              | 42.2M         | 849.5M     | [Download](http://www.sfs.uni-tuebingen.de/a3-public-data/tueba-ddp/r4/dewiki-201901/) |
 | Common Crawl (2019)                           | Webpages                  | 1.4B          | 27.3B      | Contact us                                                                             |
 
+Each subcorpus has the following annotation layers:
+
+* Part-of-speech tags
+* Inflectional morphology
+* Lemmas
+* Topological fields
+* Dependency relations
+
+A description of the annotation format can be found in the
+[stylebook](stylebook/stylebook-r4.pdf).
+
 ## Licensing & availability
 
 * The Wikipedia subcorpus is licensed under the
