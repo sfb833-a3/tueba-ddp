@@ -1,8 +1,3 @@
-extern crate clap;
-extern crate flate2;
-extern crate siphasher;
-extern crate stdinout;
-
 use std::collections::HashMap;
 use std::fs::File;
 use std::hash::{Hash, Hasher};

@@ -1,7 +1,3 @@
-extern crate clap;
-extern crate siphasher;
-extern crate stdinout;
-
 use std::collections::HashSet;
 use std::hash::{Hash, Hasher};
 use std::io::{BufRead, BufWriter, Write};
