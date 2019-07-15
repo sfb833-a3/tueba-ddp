@@ -36,10 +36,10 @@ A description of the annotation format can be found in the
   Koehn](http://www.statmt.org/europarl/) and as part of
   [OPUS](http://opus.nlpl.eu/Europarl.php). Terms of use are described
   on the [Europarl website](http://www.statmt.org/europarl/).
-* The [Common Crawl](http://commoncrawl.org/) subcorpus is publicly
+* The annotations for the [Common Crawl](http://commoncrawl.org/) are
   available. However, due to the size of the treebank (203 GB
   compressed), we do not provide a download link here. Please contact
-  us to download the corpus.
+  us to obtain the annotations.
 * The Taz subcorpus requires a license from Taz. Please contact **us**
   to obtain more information.
 
