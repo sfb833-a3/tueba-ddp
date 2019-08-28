@@ -7,6 +7,7 @@ edition = "2018"
 [dependencies]
 clap = "2.31"
 conllx = "0.11"
+failure = "0.1"
 flate2 = "1"
 lazy_static = "1"
 regex = "1"
