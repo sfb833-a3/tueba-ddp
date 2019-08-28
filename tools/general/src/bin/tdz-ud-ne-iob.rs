@@ -37,7 +37,7 @@ fn main() {
                     .features()
                     .map(Features::as_map)
                     .map(Clone::clone)
-                    .unwrap_or(BTreeMap::new());
+                    .unwrap_or_else(BTreeMap::default);
 
                 match features.entry("NE".to_owned()) {
                     Entry::Vacant(entry) => {
@@ -48,10 +48,9 @@ fn main() {
                         let entity = entry
                             .get_mut()
                             .as_mut()
-                            .ok_or(format!(
-                                "Named entity feature with missing entity: {:?}",
-                                token
-                            ))
+                            .ok_or_else(|| {
+                                format!("Named entity feature with missing entity: {:?}", token)
+                            })
                             .or_exit("Could not process token", 1);
                         fixup_entity(entity, &mut last_id);
                     }
@@ -73,10 +72,10 @@ fn fixup_entity(ud_entity: &mut String, last_id: &mut Option<String>) {
     // NE:ORG_1627129-LOC_1627129a
     //
     // Get the first part.
-    let entity = ud_entity.split("-").next().expect("Empty entity");
+    let entity = ud_entity.split('-').next().expect("Empty entity");
 
     // The entity and identifier are separated by an underscore. E.g.:
-    let sep_idx = entity.find("_").expect("Entity without separator");
+    let sep_idx = entity.find('_').expect("Entity without separator");
     let id = Some(entity[sep_idx + 1..].to_string());
     let entity = &entity[..sep_idx];
 

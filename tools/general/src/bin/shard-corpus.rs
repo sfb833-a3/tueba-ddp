@@ -71,12 +71,12 @@ fn main() {
     }
 }
 
-fn create_shard_writer(output_dir: &Path, shard: &str, gzip: bool) -> io::Result<Box<Write>> {
+fn create_shard_writer(output_dir: &Path, shard: &str, gzip: bool) -> io::Result<Box<dyn Write>> {
     let mut path = PathBuf::new();
     path.push(output_dir);
     path.push(shard);
 
-    let writer: Box<Write> = if gzip {
+    let writer: Box<dyn Write> = if gzip {
         path.set_extension("gz");
         let f = File::create(path)?;
         Box::new(GzEncoder::new(f, Compression::fast()))

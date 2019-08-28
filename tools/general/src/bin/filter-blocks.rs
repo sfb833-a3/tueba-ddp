@@ -6,10 +6,10 @@ use lazy_static::lazy_static;
 use regex::{Regex, RegexSet};
 use stdinout::{Input, OrExit, Output};
 
-static INPUT: &'static str = "INPUT";
-static OUTPUT: &'static str = "OUTPUT";
-static HTML: &'static str = "HTML";
-static REPLACEMENT: &'static str = "REPLACEMENT";
+static INPUT: &str = "INPUT";
+static OUTPUT: &str = "OUTPUT";
+static HTML: &str = "HTML";
+static REPLACEMENT: &str = "REPLACEMENT";
 
 lazy_static! {
     static ref BR_RE: Regex = Regex::new("<br */?>").unwrap();
