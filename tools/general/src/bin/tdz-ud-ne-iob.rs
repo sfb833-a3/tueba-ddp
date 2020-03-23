@@ -1,9 +1,9 @@
-use std::collections::btree_map::{BTreeMap, Entry};
+use std::collections::btree_map::Entry;
 use std::io::BufWriter;
 
 use clap::{App, AppSettings, Arg};
-use conllx::io::{ReadSentence, Reader, WriteSentence, Writer};
-use conllx::token::Features;
+use conllu::io::{ReadSentence, Reader, WriteSentence, Writer};
+use conllu::token::Misc;
 use stdinout::{Input, OrExit, Output};
 
 static DEFAULT_CLAP_SETTINGS: &[AppSettings] = &[
@@ -33,13 +33,16 @@ fn main() {
 
         for node in sentence.iter_mut() {
             if let Some(token) = node.token_mut() {
-                let mut features = token
-                    .features()
-                    .map(Features::as_map)
-                    .map(Clone::clone)
-                    .unwrap_or_else(BTreeMap::default);
+                if token.misc().is_none() {
+                    token.set_misc(Some(Misc::new()));
+                }
 
-                match features.entry("NE".to_owned()) {
+                // Temporarily work around the borrows checker
+                let token_err = token.clone();
+
+                let misc = token.misc_mut().unwrap();
+
+                match misc.entry("NE".to_owned()) {
                     Entry::Vacant(entry) => {
                         entry.insert(Some("O".to_owned()));
                         last_id = None;
@@ -49,14 +52,12 @@ fn main() {
                             .get_mut()
                             .as_mut()
                             .ok_or_else(|| {
-                                format!("Named entity feature with missing entity: {:?}", token)
+                                format!("Named entity feature with missing entity: {:?}", token_err)
                             })
                             .or_exit("Could not process token", 1);
                         fixup_entity(entity, &mut last_id);
                     }
                 }
-
-                token.set_features(Some(Features::from_iter(features)));
             }
         }
 
