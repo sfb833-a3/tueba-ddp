@@ -3,8 +3,8 @@ use std::io::BufReader;
 use std::process;
 
 use clap::{App, AppSettings, Arg};
-use conllx::graph::Node;
-use conllx::io::{ReadSentence, Reader};
+use conllu::graph::Node;
+use conllu::io::{ReadSentence, Reader};
 use stdinout::OrExit;
 
 static DEFAULT_CLAP_SETTINGS: &[AppSettings] = &[
@@ -61,7 +61,7 @@ fn main() {
 
 fn get_entity(node: &Node) -> Result<&str, &str> {
     let token = node.token().ok_or("Node is not a token")?;
-    let features = token.features().ok_or("Token without features")?.as_map();
+    let features = token.misc().ok_or("Token without misc features")?;
     features
         .get("NE")
         .ok_or("Token without the 'NE' feature")?
