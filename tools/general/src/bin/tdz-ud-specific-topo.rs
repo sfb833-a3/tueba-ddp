@@ -2,7 +2,6 @@ use std::io::BufWriter;
 
 use clap::{App, AppSettings, Arg};
 use conllu::io::{ReadSentence, Reader, WriteSentence, Writer};
-use conllu::token::Misc;
 use stdinout::{Input, OrExit, Output};
 
 static DEFAULT_CLAP_SETTINGS: &[AppSettings] = &[
@@ -30,13 +29,7 @@ fn main() {
 
         for node in sentence.iter_mut() {
             if let Some(token) = node.token_mut() {
-                if token.misc().is_none() {
-                    token.set_misc(Some(Misc::new()));
-                }
-
-                let misc = token.misc_mut().unwrap();
-
-                if let Some(topo) = misc.get_mut("TopoField") {
+                if let Some(topo) = token.misc_mut().get_mut("TopoField") {
                     let topo = topo
                         .as_mut()
                         .or_exit("Topological field feature without value: {}", 1);

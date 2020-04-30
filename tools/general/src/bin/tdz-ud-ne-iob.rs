@@ -3,7 +3,6 @@ use std::io::BufWriter;
 
 use clap::{App, AppSettings, Arg};
 use conllu::io::{ReadSentence, Reader, WriteSentence, Writer};
-use conllu::token::Misc;
 use stdinout::{Input, OrExit, Output};
 
 static DEFAULT_CLAP_SETTINGS: &[AppSettings] = &[
@@ -33,16 +32,10 @@ fn main() {
 
         for node in sentence.iter_mut() {
             if let Some(token) = node.token_mut() {
-                if token.misc().is_none() {
-                    token.set_misc(Some(Misc::new()));
-                }
-
                 // Temporarily work around the borrows checker
                 let token_err = token.clone();
 
-                let misc = token.misc_mut().unwrap();
-
-                match misc.entry("NE".to_owned()) {
+                match token.misc_mut().entry("NE".to_owned()) {
                     Entry::Vacant(entry) => {
                         entry.insert(Some("O".to_owned()));
                         last_id = None;

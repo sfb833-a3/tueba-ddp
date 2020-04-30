@@ -61,8 +61,8 @@ fn main() {
 
 fn get_entity(node: &Node) -> Result<&str, &str> {
     let token = node.token().ok_or("Node is not a token")?;
-    let features = token.misc().ok_or("Token without misc features")?;
-    features
+    token
+        .misc()
         .get("NE")
         .ok_or("Token without the 'NE' feature")?
         .as_ref()
