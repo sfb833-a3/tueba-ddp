@@ -3,6 +3,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="text" />
   <xsl:strip-space elements="*"/>
+  <xsl:preserve-space elements="s"/>
 
   <xsl:template match="* | @*">
     <xsl:copy>
@@ -49,8 +50,6 @@
     <xsl:text>&#xa;</xsl:text>
   </xsl:template>
 
-  <!-- todo: add sentence counter for sent_id -->
-
   <xsl:template match="s">
     <xsl:param name="sent_id" />
     
@@ -60,6 +59,9 @@
     <xsl:value-of select="ancestor::art/kopf/@nr" />
     <xsl:text>-</xsl:text>
     <xsl:value-of select="$sent_id" />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text># text = </xsl:text>
+    <xsl:value-of select="normalize-space(.)" />
     <xsl:text>&#xa;</xsl:text>
 
     <xsl:for-each select=".//t">
