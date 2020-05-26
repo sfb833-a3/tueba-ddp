@@ -18,15 +18,15 @@ def replace_birth_death(sent):
     inParen = 0
 
     for idx in range(len(sent)):
-        if sent[idx] == '(':
+        if sent[idx].text == '(':
             inParen += 1
-        if sent[idx] == ')':
+        if sent[idx].text == ')':
             inParen -= 1
 
-        if inParen > 0 and sent[idx] == '†':
-            sent[idx] = 'gestorben'
+        if inParen > 0 and sent[idx].text == '†':
+            sent[idx].text = 'gestorben'
 
-        if inParen > 0 and sent[idx] == '*':
+        if inParen > 0 and sent[idx].text == '*':
             sent[idx] = 'geboren'
 
 def raw_sentence(tokens):
@@ -90,12 +90,13 @@ if __name__ == "__main__":
         print("# newpar id = wiki-%s-%d" % (doc_id, para))
         sent_id = 0
         for sent in sents:
-            if options.wikipedia:
-                replace_birth_death(sent)
-
             counter = 1
             print("# sent_id = wiki-%s-%d-%d" % (doc_id, para, sent_id))
             print("# text = %s" % raw_sentence(sent))
+
+            if options.wikipedia:
+                replace_birth_death(sent)
+
             for token in sent:
                 print("%d\t%s" % (counter, token))
                 counter += 1
