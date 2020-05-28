@@ -5,7 +5,7 @@ edition = "2018"
 authors = ["Daniël de Kok <me@danieldk.eu>"]
 
 [dependencies]
-conllx = "0.9"
+conllu = "0.5"
 flate2 = "0.2"
 getopts = "0.2"
 stdinout = "0.4"

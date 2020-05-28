@@ -1,10 +1,10 @@
-use conllx;
-
 use std::collections::BTreeMap;
 use std::env::args;
 use std::io::{BufWriter, Read};
 
-use conllx::{Features, Sentence, TokenBuilder, WriteSentence};
+use conllu::graph::Sentence;
+use conllu::io::WriteSentence;
+use conllu::token::TokenBuilder;
 use getopts::Options;
 use stdinout::{Input, OrExit, Output};
 use xml::attribute::OwnedAttribute;
@@ -39,7 +39,7 @@ fn main() {
         return;
     }
 
-    let input = Input::from(matches.free.get(1));
+    let input = Input::from(matches.free.get(0));
     let reader = EuroParlReader::new(
         input
             .buf_read()
@@ -47,8 +47,8 @@ fn main() {
         matches.free[0].clone(),
     );
 
-    let output = Output::from(matches.free.get(2));
-    let mut writer = conllx::Writer::new(BufWriter::new(
+    let output = Output::from(matches.free.get(1));
+    let mut writer = conllu::io::Writer::new(BufWriter::new(
         output
             .write()
             .or_exit("Could not open output for writing", 1),
@@ -91,7 +91,7 @@ where
     }
 
     fn read_sentence(&mut self) -> Result<Option<Sentence>, ParseError> {
-        let mut tokens = Vec::new();
+        let mut sentence = Sentence::new();
         let mut in_token = false;
         let mut form = String::new();
 
@@ -133,10 +133,10 @@ where
                             features.insert("para".to_owned(), self.p_id.clone());
                         }
 
-                        tokens.push(
+                        sentence.push(
                             TokenBuilder::new(form.as_str())
-                                .features(Features::from_iter(features))
-                                .token(),
+                                .misc(features.into())
+                                .into(),
                         );
                         in_token = false;
                         form.clear();
@@ -153,10 +153,10 @@ where
             }
         }
 
-        if tokens.is_empty() {
+        if sentence.len() == 1 {
             Ok(None)
         } else {
-            Ok(Some(Sentence::new(tokens)))
+            Ok(Some(sentence))
         }
     }
 }
