@@ -1,5 +1,5 @@
 [package]
-name = "ep2conllx"
+name = "ep2conllu"
 version = "0.1.0"
 edition = "2018"
 authors = ["Daniël de Kok <me@danieldk.eu>"]
