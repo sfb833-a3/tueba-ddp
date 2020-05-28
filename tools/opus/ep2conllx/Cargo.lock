@@ -62,10 +62,10 @@ name = "ep2conllx"
 version = "0.1.0"
 dependencies = [
  "conllx 0.9.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "error-chain 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "flate2 0.2.20 (registry+https://github.com/rust-lang/crates.io-index)",
  "getopts 0.2.19 (registry+https://github.com/rust-lang/crates.io-index)",
  "stdinout 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "thiserror 1.0.19 (registry+https://github.com/rust-lang/crates.io-index)",
  "xml-rs 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -141,6 +141,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "proc-macro2"
+version = "1.0.17"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "unicode-xid 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "quote"
+version = "1.0.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "proc-macro2 1.0.17 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -151,8 +167,41 @@ version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "syn"
+version = "1.0.27"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "proc-macro2 1.0.17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "quote 1.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "unicode-xid 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "thiserror"
+version = "1.0.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "thiserror-impl 1.0.19 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "thiserror-impl"
+version = "1.0.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "proc-macro2 1.0.17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "quote 1.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 1.0.27 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "unicode-width"
 version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "unicode-xid"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -182,7 +231,13 @@ dependencies = [
 "checksum miniz-sys 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)" = "1e9e3ae51cea1576ceba0dde3d484d30e6e5b86dee0b2d412fe3a16a15c98202"
 "checksum ordermap 0.3.5 (registry+https://github.com/rust-lang/crates.io-index)" = "a86ed3f5f244b372d6b1a00b72ef7f8876d0bc6a78a4c9985c53614041512063"
 "checksum petgraph 0.4.13 (registry+https://github.com/rust-lang/crates.io-index)" = "9c3659d1ee90221741f65dd128d9998311b0e40c5d3c23a62445938214abce4f"
+"checksum proc-macro2 1.0.17 (registry+https://github.com/rust-lang/crates.io-index)" = "1502d12e458c49a4c9cbff560d0fe0060c252bc29799ed94ca2ed4bb665a0101"
+"checksum quote 1.0.6 (registry+https://github.com/rust-lang/crates.io-index)" = "54a21852a652ad6f610c9510194f398ff6f8692e334fd1145fed931f7fbe44ea"
 "checksum rustc-demangle 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)" = "ccc78bfd5acd7bf3e89cffcf899e5cb1a52d6fafa8dec2739ad70c9577a57288"
 "checksum stdinout 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "29f1026ef7b2ded56453d708809e15f148b7f5b6a51e1ee0237964881ab85680"
+"checksum syn 1.0.27 (registry+https://github.com/rust-lang/crates.io-index)" = "ef781e621ee763a2a40721a8861ec519cb76966aee03bb5d00adb6a31dc1c1de"
+"checksum thiserror 1.0.19 (registry+https://github.com/rust-lang/crates.io-index)" = "b13f926965ad00595dd129fa12823b04bbf866e9085ab0a5f2b05b850fbfc344"
+"checksum thiserror-impl 1.0.19 (registry+https://github.com/rust-lang/crates.io-index)" = "893582086c2f98cde18f906265a65b5030a074b1046c674ae898be6519a7f479"
 "checksum unicode-width 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "882386231c45df4700b275c7ff55b6f3698780a650026380e72dabe76fa46526"
+"checksum unicode-xid 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "826e7639553986605ec5979c7dd957c7895e93eabed50ab2ffa7f6128a75097c"
 "checksum xml-rs 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = "3c1cb601d29fe2c2ac60a2b2e5e293994d87a1f6fa9687a31a15270f909be9c2"

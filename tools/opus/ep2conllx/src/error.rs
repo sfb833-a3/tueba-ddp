@@ -1,14 +1,11 @@
+use thiserror::Error;
 use xml::reader;
 
-error_chain! {
-    foreign_links {
-        Xml(reader::Error);
-    }
+#[derive(Error, Debug)]
+pub enum ParseError {
+    #[error(transparent)]
+    Xml(#[from] reader::Error),
 
-    errors {
-        EmptyTokenError {
-            description("empty token")
-            display("empty token")
-        }
-    }
+    #[error("empty token")]
+    EmptyTokenError,
 }

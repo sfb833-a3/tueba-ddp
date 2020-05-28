@@ -1,6 +1,4 @@
 use conllx;
-#[macro_use]
-extern crate error_chain;
 
 use std::collections::BTreeMap;
 use std::env::args;
@@ -13,7 +11,7 @@ use xml::attribute::OwnedAttribute;
 use xml::reader::{EventReader, XmlEvent};
 
 mod error;
-use crate::error::*;
+use crate::error::ParseError;
 
 fn print_usage(program: &str, opts: Options) {
     let brief = format!(
@@ -92,7 +90,7 @@ where
         }
     }
 
-    fn read_sentence(&mut self) -> Result<Option<Sentence>> {
+    fn read_sentence(&mut self) -> Result<Option<Sentence>, ParseError> {
         let mut tokens = Vec::new();
         let mut in_token = false;
         let mut form = String::new();
@@ -120,7 +118,7 @@ where
                     "P" => self.p_id = None,
                     "w" => {
                         if form.is_empty() {
-                            return Err(ErrorKind::EmptyTokenError.into());
+                            return Err(ParseError::EmptyTokenError);
                         }
 
                         let mut features = BTreeMap::new();
@@ -164,7 +162,7 @@ where
 }
 
 impl<R: Read> IntoIterator for EuroParlReader<R> {
-    type Item = Result<Sentence>;
+    type Item = Result<Sentence, ParseError>;
     type IntoIter = Sentences<R>;
 
     fn into_iter(self) -> Self::IntoIter {
@@ -183,9 +181,9 @@ impl<R> Iterator for Sentences<R>
 where
     R: Read,
 {
-    type Item = Result<Sentence>;
+    type Item = Result<Sentence, ParseError>;
 
-    fn next(&mut self) -> Option<Result<Sentence>> {
+    fn next(&mut self) -> Option<Result<Sentence, ParseError>> {
         match self.reader.read_sentence() {
             Ok(None) => None,
             Ok(Some(sent)) => Some(Ok(sent)),
