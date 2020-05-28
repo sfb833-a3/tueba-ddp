@@ -47,7 +47,7 @@ fn main() {
         matches.free[0].clone(),
     );
 
-    let output = Output::from(matches.free.get(1));
+    let output = Output::from(matches.free.get(2));
     let mut writer = conllu::io::Writer::new(BufWriter::new(
         output
             .write()
