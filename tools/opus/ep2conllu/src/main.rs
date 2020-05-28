@@ -1,8 +1,8 @@
-use std::collections::BTreeMap;
 use std::env::args;
 use std::io::{BufWriter, Read};
+use std::mem;
 
-use conllu::graph::Sentence;
+use conllu::graph::{Comment, Sentence};
 use conllu::io::WriteSentence;
 use conllu::token::TokenBuilder;
 use getopts::Options;
@@ -69,8 +69,9 @@ where
     event_reader: EventReader<R>,
     corpus_name: String,
     chap_id: Option<String>,
-    speaker_id: Option<String>,
     p_id: Option<String>,
+    sent_id: Option<String>,
+    comments: Vec<Comment>,
 }
 
 impl<R> EuroParlReader<R>
@@ -84,9 +85,10 @@ where
         EuroParlReader {
             event_reader: EventReader::new(read),
             corpus_name: corpus_name.into(),
-            speaker_id: None,
             chap_id: None,
             p_id: None,
+            sent_id: None,
+            comments: vec![],
         }
     }
 
@@ -98,50 +100,74 @@ where
         loop {
             let event = self.event_reader.next()?;
 
-            use crate::XmlEvent::*;
+            use crate::XmlEvent::{Characters, EndDocument, EndElement, StartElement};
             match event {
                 EndDocument => break,
                 StartElement {
                     name, attributes, ..
                 } => match name.local_name.as_str() {
-                    "P" => self.p_id = get_attribute(&attributes, "id").map(str::to_owned),
+                    "P" => {
+                        self.p_id = get_attribute(&attributes, "id").map(str::to_owned);
+                        self.comments.push(Comment::AttrVal {
+                            attr: "newpar id".to_string(),
+                            val: format!(
+                                "{}-{}-{}",
+                                &self.corpus_name,
+                                self.chap_id.as_deref().expect("Unknown chapter"),
+                                self.p_id.as_deref().unwrap_or("unk"),
+                            ),
+                        });
+                    }
+                    "s" => self.sent_id = get_attribute(&attributes, "id").map(str::to_owned),
                     "w" => in_token = true,
                     "CHAPTER" => self.chap_id = get_attribute(&attributes, "ID").map(str::to_owned),
                     "SPEAKER" => {
-                        self.speaker_id = get_attribute(&attributes, "ID").map(str::to_owned)
+                        self.comments.push(Comment::AttrVal {
+                            attr: "speaker id".to_string(),
+                            val: get_attribute(&attributes, "ID")
+                                .expect("Speaker without ID")
+                                .to_owned(),
+                        });
+                        self.comments.push(Comment::AttrVal {
+                            attr: "speaker name".to_string(),
+                            val: get_attribute(&attributes, "NAME")
+                                .expect("Speaker without name")
+                                .to_owned(),
+                        });
                     }
                     _ => (),
                 },
                 EndElement { name } => match name.local_name.as_str() {
                     "CHAPTER" => self.chap_id = None,
-                    "SPEAKER" => self.speaker_id = None,
                     "P" => self.p_id = None,
                     "w" => {
                         if form.is_empty() {
                             return Err(ParseError::EmptyTokenError);
                         }
 
-                        let mut features = BTreeMap::new();
-                        features.insert("subcorpus".to_owned(), Some(self.corpus_name.clone()));
-                        if self.chap_id.is_some() {
-                            features.insert("chapter".to_owned(), self.chap_id.clone());
-                        }
-                        if self.speaker_id.is_some() {
-                            features.insert("speaker".to_owned(), self.speaker_id.clone());
-                        }
-                        if self.p_id.is_some() {
-                            features.insert("para".to_owned(), self.p_id.clone());
-                        }
-
-                        sentence.push(
-                            TokenBuilder::new(form.as_str())
-                                .misc(features.into())
-                                .into(),
-                        );
+                        sentence.push(TokenBuilder::new(form.as_str()).into());
                         in_token = false;
                         form.clear();
                     }
-                    "s" => break,
+                    "s" => {
+                        let mut comments = Vec::new();
+                        mem::swap(&mut self.comments, &mut comments);
+
+                        comments.push(Comment::AttrVal {
+                            attr: "sent_id".to_string(),
+                            val: format!(
+                                "{}-{}-{}-{}",
+                                &self.corpus_name,
+                                self.chap_id.as_deref().expect("Unknown chapter"),
+                                self.p_id.as_deref().unwrap_or("unk"),
+                                self.sent_id.as_deref().expect("Unknown sentence")
+                            ),
+                        });
+
+                        sentence.set_comments(comments);
+
+                        break;
+                    }
                     _ => (),
                 },
                 Characters(chars) => {
