@@ -1,10 +1,6 @@
-extern crate conllx;
+use conllx;
 #[macro_use]
 extern crate error_chain;
-extern crate flate2;
-extern crate getopts;
-extern crate stdinout;
-extern crate xml;
 
 use std::collections::BTreeMap;
 use std::env::args;
@@ -17,7 +13,7 @@ use xml::attribute::OwnedAttribute;
 use xml::reader::{EventReader, XmlEvent};
 
 mod error;
-use error::*;
+use crate::error::*;
 
 fn print_usage(program: &str, opts: Options) {
     let brief = format!(
@@ -104,7 +100,7 @@ where
         loop {
             let event = self.event_reader.next()?;
 
-            use XmlEvent::*;
+            use crate::XmlEvent::*;
             match event {
                 EndDocument => break,
                 StartElement {
