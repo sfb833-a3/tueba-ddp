@@ -1,0 +1,26 @@
+{
+    "danieldk": {
+        "branch": "master",
+        "description": "My Nix package set",
+        "homepage": "",
+        "owner": "danieldk",
+        "repo": "nix-packages",
+        "rev": "6f1772c61979e5955130bbda9c18ce20b9e0a825",
+        "sha256": "1jvi9ggqr2kg0gm44w8791al67y9dladsph5vm5shxzsw7g3rdkr",
+        "type": "tarball",
+        "url": "https://github.com/danieldk/nix-packages/archive/6f1772c61979e5955130bbda9c18ce20b9e0a825.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "nixos-20.03",
+        "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",
+        "homepage": "https://github.com/NixOS/nixpkgs",
+        "owner": "nixos",
+        "repo": "nixpkgs-channels",
+        "rev": "e985ffea2d640bb6fe7d5ef7aa968b2b7d107f47",
+        "sha256": "01nmwqixbkvnp9y0rkblwik6g0wk95pr9j3wrh1ar72cif47n06l",
+        "type": "tarball",
+        "url": "https://github.com/nixos/nixpkgs-channels/archive/e985ffea2d640bb6fe7d5ef7aa968b2b7d107f47.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}
